@@ -30,11 +30,11 @@ type EthereumStats struct {
 	Timestamp           int64  `json:"timestamp"`
 	PendingTransactions int    `json:"pendingTransactions"`
 	TotalPeers         int    `json:"totalPeers"`
-	// Add more fields as needed
+
 }
 
 func init() {
-	// Initialize the Ethereum client using WSS (WebSocket Secure)
+	
 	ethereumURL := "wss://seednode.mindchain.info/ws"
 	var err error
 	ethereumClient, err = rpc.DialWebsocket(ethereumURL)
@@ -44,39 +44,35 @@ func init() {
 }
 
 func fetchBlockStats() (*EthereumStats, error) {
-	// Fetch block number
+
 	var blockNumber string
 	err := ethereumClient.Call(&blockNumber, "eth_blockNumber")
 	if err != nil {
 		return nil, err
 	}
 
-	// Fetch gas price
+
 	var gasPrice string
 	err = ethereumClient.Call(&gasPrice, "eth_gasPrice")
 	if err != nil {
 		return nil, err
 	}
 
-	// Fetch pending transactions
+
 	var pendingTransactions int
 	err = ethereumClient.Call(&pendingTransactions, "eth_pendingTransactions")
 	if err != nil {
 		return nil, err
 	}
 
-	// Fetch total peers
+	s
 	var totalPeers int
 	err = ethereumClient.Call(&totalPeers, "net_peerCount")
 	if err != nil {
 		return nil, err
 	}
 
-	// You can fetch more statistics as needed
-	// Example:
-	// - Node info
-	// - Transaction counts
-	// - Account balances
+
 
 	stats := &EthereumStats{
 		BlockNumber:        blockNumber,
@@ -84,14 +80,14 @@ func fetchBlockStats() (*EthereumStats, error) {
 		Timestamp:          time.Now().Unix(),
 		PendingTransactions: pendingTransactions,
 		TotalPeers:         totalPeers,
-		// Add more fields here
+	
 	}
 
 	return stats, nil
 }
 
 func readData() (*EthereumStats, error) {
-	// Open and read data from data.json
+
 	file, err := os.Open(dataFile)
 	if err != nil {
 		return nil, err
@@ -108,7 +104,7 @@ func readData() (*EthereumStats, error) {
 }
 
 func writeData(stats *EthereumStats) error {
-	// Open and write data to data.json
+	
 	file, err := os.Create(dataFile)
 	if err != nil {
 		return err
@@ -145,7 +141,7 @@ func getStatsHandler(c *gin.Context) {
 				continue
 			}
 
-			// Write Ethereum stats to data.json
+	
 			err = writeData(stats)
 			if err != nil {
 				log.Printf("Failed to write Ethereum stats to data.json: %v", err)
@@ -166,15 +162,15 @@ func main() {
 	// Initialize the Gin router
 	r := gin.Default()
 
-	// Enable CORS for your front-end (update with your front-end URL)
+
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://your-frontend-url"}
 	r.Use(cors.New(config))
 
-	// Define WebSocket route
+
 	r.GET("/ws/stats", getStatsHandler)
 
-	// Start the HTTP server
+	
 	fmt.Println("Ethereum Stats App is running on :8080")
 	r.Run(":8080")
 }
