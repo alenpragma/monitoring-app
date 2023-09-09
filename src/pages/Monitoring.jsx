@@ -159,7 +159,7 @@ const Monitoring = () => {
               <FaTag /> <small>AverageGas Price</small>
             </div>
               <div className="">{data.gas_prices ? (
-    <div className="">{data.gas_prices.average}Gwei</div>
+    <div className="">{data.gas_prices.average}</div>
   ) : (
     <div className="">Loading...</div>
   )}
