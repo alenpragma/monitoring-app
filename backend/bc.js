@@ -17,6 +17,26 @@ app.get('/metrics', async (req, res) => {
     res.status(500).send('Error fetching Prometheus metrics');
   }
 });
+app.get('/api', async (req, res) => {
+  try {
+    const api = 'https://mainnet.mindscan.info/api/v2/stats';
+    const response = await axios.get(api); 
+    res.send(response.data);
+  } catch (error) {
+    console.error('Error fetching Prometheus metrics:', error);
+    res.status(500).send('Error fetching Prometheus metrics');
+  }
+});
+app.get('/txn', async (req, res) => {
+  try {
+    const txn = 'https://mainnet.mindscan.info/api/v2/main-page/transactions';
+    const response = await axios.get(txn); 
+    res.send(response.data);
+  } catch (error) {
+    console.error('Error fetching Prometheus metrics:', error);
+    res.status(500).send('Error fetching Prometheus metrics');
+  }
+});
 
 app.listen(port, () => {
   console.log(`Proxy server is running on port ${port}`);

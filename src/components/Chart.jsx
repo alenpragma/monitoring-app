@@ -8,11 +8,13 @@ import {
   Tooltip,
 } from 'recharts';
 
+const backendURL = 'http://localhost:4000/metrics';
+
 const Chart = () => {
   const [handshakeMetrics, setHandshakeMetrics] = useState([]);
   const [connectionMetrics, setConnectionMetrics] = useState([]);
   const [protocolsReceivedMetrics, setProtocolsReceivedMetrics] = useState([]);
-  const proxyURL = 'http://localhost:4000/metrics';
+  const proxyURL = backendURL;
 
   useEffect(() => {
     fetch(proxyURL)
@@ -101,4 +103,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default Chart ;

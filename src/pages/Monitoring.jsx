@@ -1,10 +1,107 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { BsBoxFill, BsFillLightbulbFill, BsStopwatch } from "react-icons/bs";
 import { FaComputer, FaTag } from "react-icons/fa6";
 import { GiSandsOfTime } from "react-icons/gi";
 import Chart from "../components/Chart";
+import { backendurl,stasurl,txnurl } from '../api/backendurl';
+
+
+
 
 const Monitoring = () => {
+  const [metrics, setMetrics] = useState({});
+  const [data, setData] = useState({});
+   const [loading, setLoading] = useState(true);
+   const [transactions, setTransactions] = useState([]);
+
+
+ 
+  const proxyURL =backendurl;
+
+
+  useEffect(() => {
+   
+    fetch(proxyURL)
+      .then((response) => response.text())
+      .then((data) => {
+       
+        const lines = data.split('\n');
+
+        
+        const metricsData = {};
+
+       
+        lines.forEach((line) => {
+          
+          if (line.startsWith('# HELP')) {
+           
+            const metricName = line.split(' ')[2];
+
+            
+            const valueLine = lines.find((vLine) => vLine.startsWith(metricName));
+
+            if (valueLine) {
+           
+              const metricValue = parseFloat(valueLine.split(' ')[1]);
+
+              
+              metricsData[metricName] = metricValue;
+            }
+          }
+        });
+
+        
+        setMetrics(metricsData);
+      })
+      .catch((error) => {
+        console.error('Error fetching Prometheus metrics:', error);
+      });
+  }, []);
+  useEffect(() => {
+    // Fetch data from the API
+    fetch(stasurl)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+  useEffect(() => {
+    
+    fetch(txnurl)
+      .then((response) => response.json())
+      .then((data) => {
+        setTransactions(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+  // const shortenHash = (hash) => {
+  //   return hash.slice(0, 30); 
+  // };
+  const formatHash = (hash) => {
+    const maxLength = 10; 
+    const ellipsis = '...';
+    if (hash.length <= maxLength * 2 + ellipsis.length) {
+      return hash; 
+    }
+    const start = hash.slice(0, maxLength);
+    const end = hash.slice(-maxLength);
+    return `${start}${ellipsis}${end}`;
+  };
+  
+
+ 
+
+
+
   return (
     <>
       <div className="max-w-container mx-auto px-[10px]  py-[10px] flex flex-col gap-y-[10px] md:flex-row md:gap-x-[10px]">
@@ -15,15 +112,21 @@ const Monitoring = () => {
               <BsBoxFill />
             </div>
             <div className="">
-              <small>Best Block</small>
-              <h2 className="font-thin">#25,277,632</h2>
+              <small>Total Block</small>
+              <h2 className="font-thin">{data.total_blocks}</h2>
             </div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaComputer /> <small>Active Nodes</small>
+              <FaComputer /> <small>Active Validator Nodes</small>
             </div>
-            <div className="">83/85</div>
+            <div className="">{metrics['edge_consensus_validators']}/1000</div>
+          </div>
+          <div className="flex items-center py-1 justify-between  border-b px-[10px]">
+            <div className="flex items-center gap-x-2 ">
+              <FaComputer /> <small>RPC bad calls</small>
+            </div>
+            <div className="">{metrics['edge_json_rpc_eth_call_errors']}</div>
           </div>
           <div className="border-b px-[10px]">
             
@@ -53,9 +156,14 @@ const Monitoring = () => {
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaTag /> <small>Gas Price</small>
+              <FaTag /> <small>AverageGas Price</small>
             </div>
-            <div className="">1 gwei</div>
+              <div className="">{data.gas_prices ? (
+    <div className="">{data.gas_prices.average}Gwei</div>
+  ) : (
+    <div className="">Loading...</div>
+  )}
+  Gwei</div>
           </div>
           <div className="border-b px-[10px]">
            
@@ -79,27 +187,17 @@ const Monitoring = () => {
             </div>
             <div className="">
               <small>Avg Block Time</small>
-              <h2 className="font-thin">5.12s</h2>
+              <h2 className="font-thin">{data.average_block_time / 1000}s</h2>
             </div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <BsStopwatch /> <small>Page Latency</small>
+              <BsStopwatch /> <small>RPC latency</small>
             </div>
-            <div className="">91ms</div>
+            <div className=""></div>
           </div>
-          <div className="border-b px-[10px]">
-            <small>Last Block Miners</small>
-            <div className="mt-3">
-              <small className="text-[10px]">
-                0x9e14a0597573abe111557558ccf547a48b9c76d4
-              </small>{" "}
-              <br />
-              <small className="text-[10px]">
-                0x9e14a0597573abe111557558ccf547a48b9c76d4
-              </small>
-            </div>
-          </div>
+         
+    
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
               <BsFillLightbulbFill/> <small>Uptime</small>
@@ -107,9 +205,33 @@ const Monitoring = () => {
             <div className="">100%</div>
           </div>
           <div className="border-b px-[10px]">
-            <small>Transactions</small>
+            <small>Latest Transaction Hashes</small>
             <div className="mt-3">
              {/* <Chart/> */}
+
+             {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          
+          <ul>
+            {transactions.map((item, index) => (
+              <li key={index}>
+                <a
+                  href={`https://mainnet.mindscan.info/tx/${item.hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {formatHash(item.hash)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+             <div>
+        </div>
             </div>
           </div>
         </div>
