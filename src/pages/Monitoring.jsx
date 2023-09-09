@@ -1,60 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { BsBoxFill, BsFillLightbulbFill, BsStopwatch } from "react-icons/bs";
 import { FaComputer, FaTag } from "react-icons/fa6";
 import { GiSandsOfTime } from "react-icons/gi";
 import Chart from "../components/Chart";
-import { backendurl,stasurl,txnurl } from '../api/backendurl';
-
-
-
+import { backendurl, stasurl, txnurl, blockurl } from "../api/backendurl";
 
 const Monitoring = () => {
   const [metrics, setMetrics] = useState({});
   const [data, setData] = useState({});
-   const [loading, setLoading] = useState(true);
-   const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
+  const [blocks, setBlocks] = useState([]);
 
-
- 
-  const proxyURL =backendurl;
-
+  const proxyURL = backendurl;
 
   useEffect(() => {
-   
     fetch(proxyURL)
       .then((response) => response.text())
       .then((data) => {
-       
-        const lines = data.split('\n');
+        const lines = data.split("\n");
 
-        
         const metricsData = {};
 
-       
         lines.forEach((line) => {
-          
-          if (line.startsWith('# HELP')) {
-           
-            const metricName = line.split(' ')[2];
+          if (line.startsWith("# HELP")) {
+            const metricName = line.split(" ")[2];
 
-            
-            const valueLine = lines.find((vLine) => vLine.startsWith(metricName));
+            const valueLine = lines.find((vLine) =>
+              vLine.startsWith(metricName)
+            );
 
             if (valueLine) {
-           
-              const metricValue = parseFloat(valueLine.split(' ')[1]);
+              const metricValue = parseFloat(valueLine.split(" ")[1]);
 
-              
               metricsData[metricName] = metricValue;
             }
           }
         });
 
-        
         setMetrics(metricsData);
       })
       .catch((error) => {
-        console.error('Error fetching Prometheus metrics:', error);
+        console.error("Error fetching Prometheus metrics:", error);
       });
   }, []);
   useEffect(() => {
@@ -66,12 +53,11 @@ const Monitoring = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
   useEffect(() => {
-    
     fetch(txnurl)
       .then((response) => response.json())
       .then((data) => {
@@ -79,28 +65,36 @@ const Monitoring = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
   // const shortenHash = (hash) => {
-  //   return hash.slice(0, 30); 
+  //   return hash.slice(0, 30);
   // };
   const formatHash = (hash) => {
-    const maxLength = 10; 
-    const ellipsis = '...';
+    const maxLength = 10;
+    const ellipsis = "...";
     if (hash.length <= maxLength * 2 + ellipsis.length) {
-      return hash; 
+      return hash;
     }
     const start = hash.slice(0, maxLength);
     const end = hash.slice(-maxLength);
     return `${start}${ellipsis}${end}`;
   };
-  
-
- 
-
-
+  useEffect(() => {
+    // Fetch data from the API
+    fetch(blockurl)
+      .then((response) => response.json())
+      .then((data) => {
+        setBlocks(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <>
@@ -120,25 +114,22 @@ const Monitoring = () => {
             <div className="flex items-center gap-x-2 ">
               <FaComputer /> <small>Active Validator Nodes</small>
             </div>
-            <div className="">{metrics['edge_consensus_validators']}/1000</div>
+            <div className="">{metrics["edge_consensus_validators"]}/1000</div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
               <FaComputer /> <small>RPC bad calls</small>
             </div>
-            <div className="">{metrics['edge_json_rpc_eth_call_errors']}</div>
+            <div className="">{metrics["edge_json_rpc_eth_call_errors"]}</div>
           </div>
           <div className="border-b px-[10px]">
-            
             <div className="mt-3">
               <Chart />
             </div>
           </div>
           <div className="px-[10px]">
             <small>Gas Spending</small>
-            <div className="mt-3">
-              {/* <Chart /> */}
-            </div>
+            <div className="mt-3">{/* <Chart /> */}</div>
           </div>
         </div>
 
@@ -158,24 +149,20 @@ const Monitoring = () => {
             <div className="flex items-center gap-x-2 ">
               <FaTag /> <small>AverageGas Price</small>
             </div>
-              <div className="">{data.gas_prices ? (
-    <div className="">{data.gas_prices.average}</div>
-  ) : (
-    <div className="">Loading...</div>
-  )}
-  Gwei</div>
+            <div className="">
+              {data.gas_prices ? (
+                <div className="">{data.gas_prices.average}</div>
+              ) : (
+                <div className="">Loading...</div>
+              )}
+              Gwei
+            </div>
           </div>
           <div className="border-b px-[10px]">
-           
-            <div className="mt-3">
-              {/* <Chart /> */}
-            </div>
+            <div className="mt-3">{/* <Chart /> */}</div>
           </div>
           <div className="px-[10px]">
-         
-            <div className="mt-3">
-            {/* <Chart /> */}
-            </div>
+            <div className="mt-3">{/* <Chart /> */}</div>
           </div>
         </div>
         {/* last block end */}
@@ -196,49 +183,75 @@ const Monitoring = () => {
             </div>
             <div className=""></div>
           </div>
-         
-    
+
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <BsFillLightbulbFill/> <small>Uptime</small>
+              <BsFillLightbulbFill /> <small>Uptime</small>
             </div>
             <div className="">100%</div>
           </div>
           <div className="border-b px-[10px]">
             <small>Latest Transaction Hashes</small>
             <div className="mt-3">
-             {/* <Chart/> */}
+              {/* <Chart/> */}
 
-             {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          
-          <ul>
-            {transactions.map((item, index) => (
-              <li key={index}>
-                <a
-                  href={`https://mainnet.mindscan.info/tx/${item.hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {formatHash(item.hash)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <div>
+                  <ul>
+                    {transactions.map((item, index) => (
+                      <li key={index}>
+                        <a
+                          href={`https://mainnet.mindscan.info/tx/${item.hash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {formatHash(item.hash)}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div>
+                <div className="border-b px-[10px]">
+                  <small>Latest Blocks</small>
+                  <div className="mt-3">
+                    {/* <Chart/> */}
 
-             <div>
-        </div>
+                    {loading ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <div>
+                        <ul>
+                          {blocks.map((block, index) => (
+                            <li key={index}>
+                              <a
+                                href={`https://mainnet.mindscan.info/blocks/${block.height}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {block.height}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div></div>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
             </div>
+            <div></div>
           </div>
         </div>
-        {/* Avg Block Time end */}
       </div>
+
       {/* List Start  */}
-      <div className="max-w-container mx-auto px-[10px]  py-[10px] overflow-x-scroll" ></div>
+      <div className="max-w-container mx-auto px-[10px]  py-[10px] overflow-x-scroll"></div>
       {/* list end */}
     </>
   );
