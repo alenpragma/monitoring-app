@@ -34,7 +34,7 @@ const Monitoring = () => {
           <div className="px-[10px]">
             <small>Gas Spending</small>
             <div className="mt-3">
-              <Chart />
+              {/* <Chart /> */}
             </div>
           </div>
         </div>
@@ -60,13 +60,13 @@ const Monitoring = () => {
           <div className="border-b px-[10px]">
            
             <div className="mt-3">
-              <Chart />
+              {/* <Chart /> */}
             </div>
           </div>
           <div className="px-[10px]">
          
             <div className="mt-3">
-            <Chart />
+            {/* <Chart /> */}
             </div>
           </div>
         </div>
@@ -109,7 +109,7 @@ const Monitoring = () => {
           <div className="border-b px-[10px]">
             <small>Transactions</small>
             <div className="mt-3">
-             <Chart/>
+             {/* <Chart/> */}
             </div>
           </div>
         </div>

@@ -63,31 +63,40 @@ const Chart = () => {
   return (
     <div>
       <small>Handshake Metrics</small>
-      <LineChart width={400} height={200} data={handshakeMetrics}>
+      <div className="ml-[-30px]">
+
+      <LineChart width={280} height={200} data={handshakeMetrics}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="le" />
         <YAxis />
         <Tooltip />
         <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
       </LineChart>
+      </div>
 
     <smal>Connection Metrics</smal>
-      <LineChart width={400} height={200} data={connectionMetrics}>
+    <div className="ml-[-30px]">
+
+      <LineChart width={280} height={200} data={connectionMetrics}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="le" />
         <YAxis />
         <Tooltip />
         <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={2} />
       </LineChart>
+    </div>
 
       <small>Protocols Received Metrics</small>
-      <LineChart width={400} height={200} data={protocolsReceivedMetrics}>
+      <div className="ml-[-30px]">
+
+      <LineChart width={280} height={200} data={protocolsReceivedMetrics}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="le" />
         <YAxis />
         <Tooltip />
         <Line type="monotone" dataKey="value" stroke="#ffc658" strokeWidth={2} />
       </LineChart>
+      </div>
     </div>
   );
 };
