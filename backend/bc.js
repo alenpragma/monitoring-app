@@ -39,8 +39,8 @@ app.get('/api/txn', async (req, res) => {
 });
 app.get('/api/block', async (req, res) => {
   try {
-    const txn = 'https://mainnet.mindscan.info/api/v2/main-page/blocks';
-    const response = await axios.get(txn); 
+    const block = 'https://mainnet.mindscan.info/api/v2/main-page/blocks';
+    const response = await axios.get(block); 
     res.send(response.data);
   } catch (error) {
     console.error('Error fetching Prometheus metrics:', error);
