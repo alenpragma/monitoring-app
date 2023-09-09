@@ -26,7 +26,7 @@ const Monitoring = () => {
             <div className="">83/85</div>
           </div>
           <div className="border-b px-[10px]">
-            <small>Block Time</small>
+            
             <div className="mt-3">
               <Chart />
             </div>
@@ -58,15 +58,15 @@ const Monitoring = () => {
             <div className="">1 gwei</div>
           </div>
           <div className="border-b px-[10px]">
-            <small>Block Propagation</small>
+           
             <div className="mt-3">
               <Chart />
             </div>
           </div>
           <div className="px-[10px]">
-            <small>Gas Limit</small>
+         
             <div className="mt-3">
-              <Chart />
+            <Chart />
             </div>
           </div>
         </div>
