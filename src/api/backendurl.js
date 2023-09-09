@@ -1,5 +1,5 @@
-export const backendurl = "http://localhost:4000/metrics";
-export const stasurl = "http://localhost:4000/api/stats";
-export const txnurl = "http://localhost:4000/api/txn";
-export const blockurl = "http://localhost:4000/api/block";
-export const charturl = "http://localhost:4000/api/txn/chart";
+export const backendurl = "https://testnet-api.mindscan.info/metrics";
+export const stasurl = "https://testnet-api.mindscan.info/api/stats";
+export const txnurl = "https://testnet-api.mindscan.info/api/txn";
+export const blockurl = "https://testnet-api.mindscan.info/api/block";
+export const charturl = "https://testnet-api.mindscan.info/api/txn/chart";
