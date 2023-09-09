@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BsBoxFill, BsFillLightbulbFill, BsStopwatch } from "react-icons/bs";
-import { FaComputer, FaTag } from "react-icons/fa6";
+import {
+  FaArrowDownUpAcrossLine,
+  FaBandage,
+  FaComputer,
+  FaPooStorm,
+  FaTag,
+} from "react-icons/fa6";
 import { GiSandsOfTime } from "react-icons/gi";
 import Chart from "../components/Chart";
+import TxnChart from "../components/txnchart";
 import { backendurl, stasurl, txnurl, blockurl } from "../api/backendurl";
 
 const Monitoring = () => {
@@ -45,7 +52,6 @@ const Monitoring = () => {
       });
   }, []);
   useEffect(() => {
-    // Fetch data from the API
     fetch(stasurl)
       .then((response) => response.json())
       .then((data) => {
@@ -118,17 +124,27 @@ const Monitoring = () => {
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaComputer /> <small>RPC bad calls</small>
+              <FaArrowDownUpAcrossLine /> <small>RPC bad calls</small>
             </div>
             <div className="">{metrics["edge_json_rpc_eth_call_errors"]}</div>
+          </div>
+          <div className="flex items-center py-1 justify-between  border-b px-[10px]">
+            <div className="flex items-center gap-x-2 ">
+              <FaPooStorm /> <small>Know tx</small>
+            </div>
+            <div className="">{metrics["edge_txpool_already_known_tx"]}</div>
           </div>
           <div className="border-b px-[10px]">
             <div className="mt-3">
               <Chart />
             </div>
           </div>
+          <div className="mt-3">
+            <TxnChart />
+          </div>
+
           <div className="px-[10px]">
-            <small>Gas Spending</small>
+            <small>{/*Gas Spending*/}</small>
             <div className="mt-3">{/* <Chart /> */}</div>
           </div>
         </div>
@@ -181,7 +197,9 @@ const Monitoring = () => {
             <div className="flex items-center gap-x-2 ">
               <BsStopwatch /> <small>RPC latency</small>
             </div>
-            <div className=""></div>
+            <div className="">
+              {metrics["edge_json_rpc_eth_blockNumber_time"]}
+            </div>
           </div>
 
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
