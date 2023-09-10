@@ -12,6 +12,7 @@ import Chart from "../components/Chart";
 import TxnChart from "../components/txnchart";
 import { backendurl, stasurl, txnurl, blockurl } from "../api/backendurl";
 
+
 const Monitoring = () => {
   const [metrics, setMetrics] = useState({});
   const [data, setData] = useState({});
@@ -104,77 +105,78 @@ const Monitoring = () => {
 
   return (
     <>
-      <div className="max-w-container mx-auto px-[10px]  py-[10px] flex flex-col gap-y-[10px] md:flex-row md:gap-x-[10px]">
-        {/* best block start */}
-        <div className="md:w-[24%] w-full border ">
+    <div className="container text-center"><h1 className="text-[#43d9ff]">Monitoring App</h1></div>
+      <div className="max-w-container mx-auto px-[10px] justify-center  py-[10px] flex flex-col gap-y-[10px] md:flex-row md:gap-x-[10px]">
+        {/* best block start */} 
+        <div className="md:w-[24%] w-full border  shadow-md rounded-md bg-[#ffffffa5]">
           <div className="flex gap-x-3  items-center border-b px-[10px]">
             <div className="text-[50px]">
-              <BsBoxFill />
+              <BsBoxFill className="text-[#43d9ff]" />
             </div>
             <div className="">
-              <small>Total Block</small>
-              <h2 className="font-thin">{data.total_blocks}</h2>
+              <small className="text-[#b137a5]">Total Block</small>
+              <h2 className="font-thin text-[#37b22a]">{data.total_blocks}</h2>
             </div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaComputer /> <small>Active Validator Nodes</small>
+              <FaComputer className="text-green-700" /> <small className="text-[#b137a5]">Active Validator Nodes</small>
             </div>
-            <div className="">{metrics["edge_consensus_validators"]}/1000</div>
+            <div className="text-green-700">{metrics["edge_consensus_validators"]}/1000</div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaArrowDownUpAcrossLine /> <small>RPC bad calls</small>
+              <FaArrowDownUpAcrossLine className="text-green-700" /> <small className="text-[#b137a5]">RPC bad calls</small>
             </div>
-            <div className="">{metrics["edge_json_rpc_eth_call_errors"]}</div>
+            <div className="text-green-700">{metrics["edge_json_rpc_eth_call_errors"]}</div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaPooStorm /> <small>Know tx</small>
+              <FaPooStorm className="text-green-700" /> <small className="text-[#b137a5]">Know tx</small>
             </div>
-            <div className="">{metrics["edge_txpool_already_known_tx"]}</div>
+            <div className="text-green-700">{metrics["edge_txpool_already_known_tx"]}</div>
           </div>
-          <div className="border-b px-[10px]">
+          <div className=" px-[10px]">
             <div className="mt-3">
               <Chart />
+         
+            <TxnChart />
             </div>
           </div>
-          <div className="mt-3">
-            <TxnChart />
-          </div>
+      
 
           <div className="px-[10px]">
-            <small>{/*Gas Spending*/}</small>
+            <small className="text-[#b137a5]">{/*Gas Spending*/}</small>
             <div className="mt-3">{/* <Chart /> */}</div>
           </div>
         </div>
 
         {/* best block end */}
         {/* last block start */}
-        <div className="md:w-[24%] w-full border ">
+        <div className="md:w-[24%] w-full border  shadow-md rounded-md bg-[#ffffffa5]">
           <div className="flex gap-x-3  items-center border-b px-[10px]">
             <div className="text-[50px]">
-              <GiSandsOfTime />
+              <GiSandsOfTime className="text-[#43d9ff]" />
             </div>
             <div className="">
-              <small>Last Block</small>
-              <h2 className="font-thin">1s ago</h2>
+              <small className="text-[#b137a5]">Last Block</small>
+              <h2 className="font-thin text-[#37b22a]">1s ago</h2>
             </div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <FaTag /> <small>AverageGas Price</small>
+              <FaTag className="text-green-700" /> <small className="text-[#b137a5]">AverageGas Price</small>
             </div>
-            <div className="">
+            <div className="flex gap-x-2 text-green-700">
               {data.gas_prices ? (
-                <div className="">{data.gas_prices.average}</div>
+                <div className="text-green-700">{data.gas_prices.average}</div>
               ) : (
-                <div className="">Loading...</div>
+                <div className="text-green-700">Loading...</div>
               )}
               Gwei
             </div>
           </div>
-          <div className="border-b px-[10px]">
+          <div className=" px-[10px]">
             <div className="mt-3">{/* <Chart /> */}</div>
           </div>
           <div className="px-[10px]">
@@ -183,33 +185,33 @@ const Monitoring = () => {
         </div>
         {/* last block end */}
         {/* Avg Block Time start */}
-        <div className="md:w-[24%] w-full border ">
+        <div className="md:w-[24%] w-full border  shadow-md rounded-md bg-[#ffffffa5]">
           <div className="flex gap-x-3  items-center border-b px-[10px]">
             <div className="text-[50px]">
-              <BsStopwatch />
+              <BsStopwatch className="text-[#43d9ff]" />
             </div>
             <div className="">
-              <small>Avg Block Time</small>
-              <h2 className="font-thin">{data.average_block_time / 1000}s</h2>
+              <small className="text-[#b137a5]">Avg Block Time</small>
+              <h2 className="font-thin text-[#37b22a]">{data.average_block_time / 1000}s</h2>
             </div>
           </div>
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <BsStopwatch /> <small>RPC latency</small>
+              <BsStopwatch className="text-green-700" /> <small className="text-[#b137a5]">RPC latency</small>
             </div>
-            <div className="">
+            <div className="text-green-700">
               {metrics["edge_json_rpc_eth_blockNumber_time"]}
             </div>
           </div>
 
           <div className="flex items-center py-1 justify-between  border-b px-[10px]">
             <div className="flex items-center gap-x-2 ">
-              <BsFillLightbulbFill /> <small>Uptime</small>
+              <BsFillLightbulbFill className="text-green-700" /> <small className="text-[#b137a5]">Uptime</small>
             </div>
-            <div className="">100%</div>
+            <div className="text-green-700">100%</div>
           </div>
-          <div className="border-b px-[10px]">
-            <small>Latest Transaction Hashes</small>
+          <div className=" px-[10px]">
+            <small className="text-[#b137a5]">Latest Transaction Hashes</small>
             <div className="mt-3">
               {/* <Chart/> */}
 
@@ -217,13 +219,14 @@ const Monitoring = () => {
                 <p>Loading...</p>
               ) : (
                 <div>
-                  <ul>
+                  <ul className="!p-0" >
                     {transactions.map((item, index) => (
                       <li key={index}>
                         <a
                           href={`https://mainnet.mindscan.info/tx/${item.hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="text-red-500"
                         >
                           {formatHash(item.hash)}
                         </a>
@@ -233,22 +236,23 @@ const Monitoring = () => {
                 </div>
               )}
               <div>
-                <div className="border-b px-[10px]">
-                  <small>Latest Blocks</small>
+                <div >
+                  <small className="text-[#b137a5]">Latest Blocks</small>
                   <div className="mt-3">
                     {/* <Chart/> */}
 
                     {loading ? (
                       <p>Loading...</p>
                     ) : (
-                      <div>
-                        <ul>
+                      <div className="!p-0">
+                        <ul className="!p-0">
                           {blocks.map((block, index) => (
                             <li key={index}>
                               <a
                                 href={`https://mainnet.mindscan.info/blocks/${block.height}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                className="text-red-500"
                               >
                                 {block.height}
                               </a>
@@ -269,7 +273,7 @@ const Monitoring = () => {
       </div>
 
       {/* List Start  */}
-      <div className="max-w-container mx-auto px-[10px]  py-[10px] overflow-x-scroll"></div>
+      {/* <div className="max-w-container mx-auto px-[10px]  py-[10px] overflow-x-scroll"></div> */}
       {/* list end */}
     </>
   );

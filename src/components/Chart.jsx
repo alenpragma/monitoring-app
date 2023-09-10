@@ -64,7 +64,7 @@ const Chart = () => {
 
   return (
     <div>
-      <small>Handshake Metrics</small>
+      <small className='text-[#b137a5]'>Handshake Metrics</small>
       <div className="ml-[-30px]">
 
       <LineChart width={280} height={200} data={handshakeMetrics}>
@@ -76,7 +76,7 @@ const Chart = () => {
       </LineChart>
       </div>
 
-    <smal>Connection Metrics</smal>
+    <smal className='text-[#b137a5]'>Connection Metrics</smal>
     <div className="ml-[-30px]">
 
       <LineChart width={280} height={200} data={connectionMetrics}>
@@ -88,7 +88,7 @@ const Chart = () => {
       </LineChart>
     </div>
 
-      <small>Protocols Received Metrics</small>
+      <small className='text-[#b137a5]'>Protocols Received Metrics</small>
       <div className="ml-[-30px]">
 
       <LineChart width={280} height={200} data={protocolsReceivedMetrics}>
